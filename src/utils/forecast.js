@@ -2,7 +2,8 @@ const request = require('request');
 
 const forecast = (latitude, longitude, callback) => {
     const url = `http://api.weatherstack.com/current?access_key=ccee132659748904695dd3419ea21f69&query=${latitude},${longitude}&units=f`;
-    console.log(url);
+    // console.log(url);
+
     request({ url, json: true }, (error, { body }) => {
 
         if (error) {
@@ -12,13 +13,19 @@ const forecast = (latitude, longitude, callback) => {
         } else {
             const {
                 weather_descriptions,
+                weather_icons,
                 temperature,
                 feelslike
             } = body.current;
 
             const str = `${weather_descriptions[0]}. It is currently ${temperature} degrees out. It feels like ${feelslike} degrees out.`
 
-            callback(undefined, str);
+            const data = {
+                weather_message: str,
+                weather_icons
+            }
+
+            callback(undefined, data);
         }
     })
 };
